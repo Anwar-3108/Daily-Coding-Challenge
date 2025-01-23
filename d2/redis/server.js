@@ -1,20 +1,20 @@
 // Import required modules
 const redis = require("redis"); // Redis client for interacting with the Redis database
-const express = require("express"); // Express framework for handling HTTP requests
+const express = require("express");
 
-const app = express(); // Create an Express application
+const app = express(); 
 let redisClient; // Declare Redis client variable
 
-// Initialize Redis Client
+// Initialize Redis Client [IIFE]
 (async () => {
   try {
     // Create a Redis client instance
-    redisClient = redis.createClient();
+    redisClient = redis.createClient(); // by default it uses defult port:6379 and host:127.0.0.1 , in the docker container ports are mapped [6379:6379] , [8001: 8001]
 
     // Attach an error handler for Redis connection issues
     redisClient.on("error", (err) => {
       console.error(`Error connecting to Redis: ${err}`);
-      process.exit(1); // Exit the process on Redis connection failure
+      process.exit(1); 
     });
 
     // Connect to the Redis server
@@ -22,14 +22,14 @@ let redisClient; // Declare Redis client variable
     console.log("Connected to Redis successfully!");
   } catch (err) {
     console.error(`Failed to initialize Redis: ${err.message}`);
-    process.exit(1); // Ensure the app doesn't run without Redis
+    process.exit(1); 
   }
 })();
 
 // Middleware to parse JSON requests
 app.use(express.json());
 
-// Basic route for testing server functionality
+
 app.get("/", (req, res) => {
   res.send("Hello World! Redis and Express are working together.");
 });
