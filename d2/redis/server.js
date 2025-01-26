@@ -1,16 +1,23 @@
-// Import required modules
-const redis = require("redis"); // Redis client for interacting with the Redis database
+const redis = require("redis");
 const express = require("express");
-const axios  = require("axios");
+const axios = require("axios");
+require("dotenv").config();  
 
 const app = express();
 let redisClient; // Declare Redis client variable
 
-// Initialize Redis Client [IIFE]
+// Initialize Redis Client
 (async () => {
   try {
+    // Use environment variables for Redis connection
+    const redisHost = process.env.REDIS_HOST || "localhost";
+    const redisPort = process.env.REDIS_PORT || 6379;
+
     // Create a Redis client instance
-    redisClient = redis.createClient(); // by default redis uses defult port:6379 and host:127.0.0.1 , in the docker container ports are mapped [6379:6379] , [8001: 8001]
+    redisClient = redis.createClient({
+      host: redisHost,
+      port: redisPort,
+    });
 
     // Attach an error handler for Redis connection issues
     redisClient.on("error", (err) => {
@@ -18,7 +25,7 @@ let redisClient; // Declare Redis client variable
       process.exit(1);
     });
 
-    // Connect to the Redis server
+    // Connect to Redis
     await redisClient.connect();
     console.log("Connected to Redis successfully!");
   } catch (err) {
