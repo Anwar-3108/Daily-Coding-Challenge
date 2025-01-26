@@ -1,0 +1,8 @@
+version: '3.8'
+services:
+  node-app:
+    environment:
+      - NODE_ENV=production
+  redis:
+    environment:
+      - REDIS_PASSWORD=strong_password
